@@ -1,0 +1,30 @@
+//This Pipeline should have trigger for create_kubernetes_cluster pipeline 
+
+
+pipeline {
+    agent any
+    stages {
+       stage('create_all_services'){
+           steps {
+               script{
+                   try{
+                   sh 'rm -rfv *'   
+                   dir('gcp-devops-code'){
+                   git branch: 'main', changelog: false, credentialsId: 'git_credentials', poll: false, url: 'https://github.com/di-devops-poc/gcp-devops-code'
+                   }
+				   dir('gcp-devops-code/devops_shell_scripts'){
+					sh 'gcloud container clusters get-credentials demo --zone=us-central1-a'
+				    sh 'sh create_all_services.sh'
+				   }
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error('Error!!!')
+                      
+                  }
+                }
+            }
+        }
+        
+    }
+}
