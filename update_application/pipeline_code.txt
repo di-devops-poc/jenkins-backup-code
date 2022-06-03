@@ -1,0 +1,103 @@
+//This Pipeline should have Trigger from Generic Webhook Trigger.
+//The trigger will have two varibles with expressions.
+// variable1 : commit_added Expression: $.commits[*].['added']
+// variable2 : commit_modified Expression: $.commits[*].['modified']
+
+pipeline {
+    agent any 
+    environment {
+        modified = "${commit_modified}"
+        added    = "${commit_added}"
+    }
+    stages {
+        stage('clone_repo_application_services'){
+           steps {
+               script{
+                   try{
+                   sh 'rm -rfv *'   
+                   dir('gcp-application-services'){
+                   git branch: 'main', changelog: false, credentialsId: 'git_credentials', poll: false, url: 'https://github.com/di-devops-poc/gcp-application-services'
+                   }
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error('Error!!!')
+                      
+                  }
+                }
+            }
+        }
+        stage('clone_repo_devops_code'){
+            steps{
+                script{
+                     try{
+                     dir('gcp_devops_code'){
+                     git branch: 'main', changelog: false, credentialsId: 'git_credentials', poll: false, url: 'https://github.com/di-devops-poc/gcp-devops-code'
+                    }
+                   }
+                   catch(err){
+                       echo err.getMessage();
+                       error('Error!!!')
+                       
+                   }
+                }
+            }
+        }
+        
+        stage('build'){
+            steps {
+                script{
+                    try{
+                        dir('gcp_devops_code/devops_shell_scripts/'){
+                            
+                            sh "sh check_build_image.sh ${added} ${modified} ${BUILD_NUMBER}"
+                        }
+                     
+                    }
+                   catch(err){
+                       echo err.getMessage();
+                       error('Error!!!')
+            }
+                }
+            }
+        }
+        stage('push'){
+            steps {
+                script{
+                    try{
+                        dir('gcp_devops_code/devops_shell_scripts'){
+                             sh "sh check_push_image.sh ${added} ${modified} ${BUILD_NUMBER}"
+                        }
+                    
+                    }
+                   catch(err){
+                       echo err.getMessage();
+                       error('Error!!!')
+                       
+                   }
+                }
+            }
+        }
+        stage('update_service'){
+           steps {
+               script{
+                   try{
+				   dir('gcp_devops_code/devops_shell_scripts/'){
+				    sh "echo ${added}"
+				    sh "echo ${modified}"
+				    
+				    sh "sh update_service.sh ${added} ${modified}"
+				   }
+
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error('Error!!!')
+                      
+                  }
+                }
+            }
+        }
+        
+    }
+}
