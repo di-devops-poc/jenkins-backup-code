@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    stages {
+        stage('clone_repo_application_services'){
+           steps {
+               script{
+                   try{
+                   sh 'rm -rfv *'   
+                   dir('gcp-application-services'){
+                   git branch: 'main', changelog: false, credentialsId: 'git_credentials', poll: false, url: 'https://github.com/di-devops-poc/gcp-application-services'
+                   }
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error('Error!!!')
+                      
+                  }
+                }
+            }
+        }
+        stage('create_all_services'){
+           steps {
+               script{
+                   try{
+                   dir('gcp-devops-code'){
+                   git branch: 'main', changelog: false, credentialsId: 'git_credentials', poll: false, url: 'https://github.com/di-devops-poc/gcp-devops-code'
+                   }
+				   dir('gcp-devops-code/devops_shell_scripts'){
+//					sh 'gcloud container clusters get-credentials demo --zone=us-central1-a'
+				    sh 'bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/create_all_services.sh ${WORKSPACE}'
+				   }
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error('Error!!!')
+                      
+                  }
+                }
+            }
+        }
+        
+    }
+}
