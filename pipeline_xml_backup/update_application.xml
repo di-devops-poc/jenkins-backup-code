@@ -1,0 +1,151 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1145.v7f2433caa07f">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.3"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.3">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description>This pipeline creates the images of application services..</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <org.jenkinsci.plugins.gwt.GenericTrigger plugin="generic-webhook-trigger@1.84">
+          <spec></spec>
+          <genericVariables>
+            <org.jenkinsci.plugins.gwt.GenericVariable>
+              <expressionType>JSONPath</expressionType>
+              <key>commit_added</key>
+              <value>$.commits[*].[&apos;added&apos;]</value>
+              <regexpFilter></regexpFilter>
+              <defaultValue></defaultValue>
+            </org.jenkinsci.plugins.gwt.GenericVariable>
+            <org.jenkinsci.plugins.gwt.GenericVariable>
+              <expressionType>JSONPath</expressionType>
+              <key>commit_modified</key>
+              <value>$.commits[*].[&apos;modified&apos;]</value>
+              <regexpFilter></regexpFilter>
+              <defaultValue></defaultValue>
+            </org.jenkinsci.plugins.gwt.GenericVariable>
+          </genericVariables>
+          <regexpFilterText></regexpFilterText>
+          <regexpFilterExpression></regexpFilterExpression>
+          <printPostContent>false</printPostContent>
+          <printContributedVariables>false</printContributedVariables>
+          <causeString>Generic Cause</causeString>
+          <token>4567</token>
+          <tokenCredentialId></tokenCredentialId>
+          <silentResponse>false</silentResponse>
+          <overrideQuietPeriod>false</overrideQuietPeriod>
+        </org.jenkinsci.plugins.gwt.GenericTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2660.vb_c0412dc4e6d">
+    <script>pipeline {
+    agent any 
+    environment {
+        modified = &quot;${commit_modified}&quot;
+        added    = &quot;${commit_added}&quot;
+    }
+    stages {
+        stage(&apos;clone_repo_application_services&apos;){
+           steps {
+               script{
+                   try{
+                   sh &apos;rm -rfv *&apos;   
+                   dir(&apos;gcp-application-services&apos;){
+                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/gcp-application-services&apos;
+                   }
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error(&apos;Error!!!&apos;)
+                      
+                  }
+                }
+            }
+        }
+        stage(&apos;clone_repo_devops_code&apos;){
+            steps{
+                script{
+                     try{
+                     dir(&apos;gcp-devops-code&apos;){
+                     git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/gcp-devops-code&apos;
+                    }
+                   }
+                   catch(err){
+                       echo err.getMessage();
+                       error(&apos;Error!!!&apos;)
+                       
+                   }
+                }
+            }
+        }
+        
+        stage(&apos;build&apos;){
+            steps {
+                script{
+                    try{
+                    dir(&apos;gcp-devops-code/devops_shell_scripts/&apos;){
+                            
+                            sh &quot;bash check_build_image.sh ${added} ${modified} ${BUILD_NUMBER} ${WORKSPACE}&quot;
+                        }
+                     
+                    }
+                   catch(err){
+                       echo err.getMessage();
+                       error(&apos;Error!!!&apos;)
+            }
+                }
+            }
+        }
+        stage(&apos;push&apos;){
+            steps {
+                script{
+                    try{
+                        dir(&apos;gcp-devops-code/devops_shell_scripts&apos;){
+                             sh &quot;bash check_push_image.sh ${added} ${modified} ${BUILD_NUMBER} ${WORKSPACE}&quot;
+                        }
+                    
+                    }
+                   catch(err){
+                       echo err.getMessage();
+                       error(&apos;Error!!!&apos;)
+                       
+                   }
+                }
+            }
+        }
+        stage(&apos;update_service&apos;){
+           steps {
+               script{
+                   try{
+				   dir(&apos;gcp-devops-code/devops_shell_scripts/&apos;){
+				    sh &quot;echo ${added}&quot;
+				    sh &quot;echo ${modified}&quot;
+				    
+				    sh &quot;bash update_service.sh ${added} ${modified} ${WORKSPACE}&quot;
+				   }
+
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error(&apos;Error!!!&apos;)
+                      
+                  }
+                }
+            }
+        }
+        
+    }
+}</script>
+    <sandbox>false</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
