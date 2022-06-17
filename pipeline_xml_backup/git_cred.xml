@@ -1,0 +1,19 @@
+<list>
+  <com.cloudbees.plugins.credentials.domains.DomainCredentials plugin="credentials@2.6.1.1">
+    <domain>
+      <specifications/>
+    </domain>
+    <credentials>
+      <com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>
+        <scope>GLOBAL</scope>
+        <id>git_credentials</id>
+        <description></description>
+        <username>di-devops-poc</username>
+        <password>
+          <secret-redacted/>
+        </password>
+        <usernameSecret>false</usernameSecret>
+      </com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>
+    </credentials>
+  </com.cloudbees.plugins.credentials.domains.DomainCredentials>
+</list>
