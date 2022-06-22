@@ -1,5 +1,5 @@
 <list>
-  <com.cloudbees.plugins.credentials.domains.DomainCredentials plugin="credentials@2.6.1.1">
+  <com.cloudbees.plugins.credentials.domains.DomainCredentials plugin="credentials@1087.1089.v2f1b_9a_b_040e4">
     <domain>
       <specifications/>
     </domain>
