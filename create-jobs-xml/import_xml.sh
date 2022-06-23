@@ -7,6 +7,8 @@ VM_IP_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
 JENKINS_PASS=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 
+java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} install-plugin Generic-Webhook-Trigger -deploy
+
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} create-job update_application < update_application.xml 
 
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} create-job create_all_services < create_all_services.xml
