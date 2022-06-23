@@ -1,6 +1,7 @@
 #!/bin/bash
-
-cd jenkins-backup-code/pipeline_xml_backup
+cd
+WORK_SPACE=$(pwd)
+cd ${WORK_SPACE}/jenkins-backup-code/pipeline_xml_backup
 java -jar jenkins-cli.jar -s VM_IP_ADDR -auth admin:PASS create-job update_application < update_application.xml 
 
 java -jar jenkins-cli.jar -s VM_IP_ADDR -auth admin:PASS create-job create_all_services < create_all_services.xml
