@@ -1,9 +1,4 @@
 #!/bin/bash
-cd
-WORK_SPACE=$(pwd)
-cd ${WORK_SPACE}/jenkins-backup-code/create-jobs-xml
-
-
 VM_IP_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
 JENKINS_PASS=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
