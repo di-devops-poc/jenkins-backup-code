@@ -1,4 +1,5 @@
 #!/bin/bash
+cd
 WORK_SPACE=$(pwd)
 cd ${WORK_SPACE}/jenkins-backup-code/create-jobs-xml
 
