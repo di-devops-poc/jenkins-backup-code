@@ -1,6 +1,6 @@
 #!/bin/bash
-
-cd jenkins-backup-code/create-jobs-xml
+WORK_SPACE=$(pwd)
+cd ${WORK_SPACE}/jenkins-backup-code/create-jobs-xml
 
 
 VM_IP_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
