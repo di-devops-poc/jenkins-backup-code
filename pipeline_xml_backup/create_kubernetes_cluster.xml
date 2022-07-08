@@ -40,7 +40,7 @@
                                try{
                                         dir(&apos;gcp-devops-code/create_cluster&apos;)
                                         {
-                                                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_dnsip.sh ${WORKSPACE}&apos;
+                                                          
                                                             sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_gcp_region_project_in_tf.sh ${WORKSPACE}&apos;
                                                             sh &apos;terraform init&apos;
                                                             sh &apos;terraform plan -lock=false&apos;
