@@ -1,8 +1,8 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<flow-definition plugin="workflow-job@1145.v7f2433caa07f">
+<flow-definition plugin="workflow-job@1203.v7b_7023424efe">
   <actions>
-    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.3"/>
-    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.3">
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2097.v33db_b_de764b_e"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2097.v33db_b_de764b_e">
       <jobProperties/>
       <triggers/>
       <parameters/>
@@ -12,7 +12,7 @@
   <description>This pipeline creates the kubernetes cluster..</description>
   <keepDependencies>false</keepDependencies>
   <properties/>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2660.vb_c0412dc4e6d">
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2746.v0da_83a_332669">
     <script>pipeline {
     agent any
     stages {
@@ -20,7 +20,7 @@
            steps {
                script{
                    try{
-                   sh &apos;rm -rfv *&apos;   
+                   sh &apos;rm -rfv *&apos;
                    dir(&apos;gcp-devops-code&apos;){
                    git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/gcp-devops-code&apos;
                    }
@@ -28,33 +28,33 @@
                   catch(err){
                       echo err.getMessage();
                       error(&apos;Error!!!&apos;)
-                      
+
                   }
                 }
             }
         }
         stage(&apos;creatingcluster&apos;){
             steps{
-                
+
                     script{
                                try{
                                         dir(&apos;gcp-devops-code/create_cluster&apos;)
                                         {
-//				                            sh &apos;chmod 777 ${WORKSPACE}/gcp_devops_code/configfile&apos;
-				                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_gcp_region_project_in_tf.sh ${WORKSPACE}&apos;
-				                            sh &apos;terraform init&apos;
-				                            sh &apos;terraform plan -lock=false&apos;
-				                            sh &apos;terraform apply --auto-approve -lock=false&apos;
-				                        }
+                                                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_dnsip.sh ${WORKSPACE}&apos;
+                                                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_gcp_region_project_in_tf.sh ${WORKSPACE}&apos;
+                                                            sh &apos;terraform init&apos;
+                                                            sh &apos;terraform plan -lock=false&apos;
+                                                            sh &apos;terraform apply --auto-approve -lock=false&apos;
+                                                        }
                                    }
                                 catch(err){
                                         echo err.getMessage();
                                         error(&apos;Error!!!&apos;)
-                                        }   
+                                        }
                         }
                 }
         }
-        
+
     }
 }</script>
     <sandbox>false</sandbox>
