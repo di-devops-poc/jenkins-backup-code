@@ -25,6 +25,24 @@ pipeline {
                 }
             }
         }
-        
+         stage('create-dns-recordset'){
+           steps {
+               script{
+                   try{
+                   dir('gcp-devops-code'){
+                   git branch: 'main', changelog: false, credentialsId: 'git_credentials', poll: false, url: 'https://github.com/di-devops-poc/gcp-devops-code'
+                   }
+				   dir('gcp-devops-code/devops_shell_scripts'){
+				    sh 'bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_dnsip.sh ${WORKSPACE}'
+				   }
+                  }
+                  catch(err){
+                      echo err.getMessage();
+                      error('Error!!!')
+                      
+                  }
+                }
+            }
+        }  
     }
 }
