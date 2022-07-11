@@ -58,6 +58,7 @@
 				   dir(&apos;gcp-devops-code/devops_shell_scripts&apos;){
 //					sh &apos;gcloud container clusters get-credentials demo --zone=us-central1-a&apos;
 				    sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/create_all_services.sh ${WORKSPACE}&apos;
+	                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_dnsip.sh ${WORKSPACE}&apos;
 				   }
                   }
                   catch(err){
