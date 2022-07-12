@@ -23,4 +23,4 @@ java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS
 
 #Create credentials from .xml files.
 #Note: Change the credentails-password manually from the Jenkins console.
-java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} import-credentials-as-xml "system::system::jenkins" < git_cred.xml
+#java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} import-credentials-as-xml "system::system::jenkins" < git_cred.xml
