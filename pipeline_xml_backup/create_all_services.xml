@@ -37,7 +37,7 @@
                    try{
                    sh &apos;rm -rfv *&apos;   
                    dir(&apos;gcp-application-services&apos;){
-                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/gcp-application-services&apos;
+                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/application-services&apos;
                    }
                   }
                   catch(err){
