@@ -52,13 +52,12 @@
            steps {
                script{
                    try{
-                   dir(&apos;gcp-devops-code&apos;){
-                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/gcp-devops-code&apos;
+                   dir(&apos;${cloudname}-devops-code&apos;){
+                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/${cloudname}-devops-code&apos;
                    }
-				   dir(&apos;gcp-devops-code/devops_shell_scripts&apos;){
-//					sh &apos;gcloud container clusters get-credentials demo --zone=us-central1-a&apos;
-				    sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/create_all_services.sh ${WORKSPACE}&apos;
-	                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_dnsip.sh ${WORKSPACE}&apos;
+				   dir(&apos;${cloudname}-devops-code/devops_shell_scripts&apos;){					
+				    sh &apos;bash ${WORKSPACE}/${cloudname}-devops-code/devops_shell_scripts/create_all_services.sh ${WORKSPACE}&apos;
+	                            sh &apos;bash ${WORKSPACE}/${cloudname}-devops-code/devops_shell_scripts/update_dnsip.sh ${WORKSPACE}&apos;
 				   }
                   }
                   catch(err){
