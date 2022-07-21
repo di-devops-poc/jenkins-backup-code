@@ -21,8 +21,8 @@
                script{
                    try{
                    sh &apos;rm -rfv *&apos;
-                   dir(&apos;gcp-devops-code&apos;){
-                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/gcp-devops-code&apos;
+                   dir(&apos;${cloudname}-devops-code&apos;){
+                   git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/${cloudname}-devops-code&apos;
                    }
                   }
                   catch(err){
@@ -38,10 +38,10 @@
 
                     script{
                                try{
-                                        dir(&apos;gcp-devops-code/create_cluster&apos;)
+                                        dir(&apos;${cloudname}-devops-code/create_cluster&apos;)
                                         {
                                                           
-                                                            sh &apos;bash ${WORKSPACE}/gcp-devops-code/devops_shell_scripts/update_gcp_region_project_in_tf.sh ${WORKSPACE}&apos;
+                                                            sh &apos;bash ${WORKSPACE}/${cloudname}-devops-code/devops_shell_scripts/update_gcp_region_project_in_tf.sh ${WORKSPACE}&apos;
                                                             sh &apos;terraform init&apos;
                                                             sh &apos;terraform plan -lock=false&apos;
                                                             sh &apos;terraform apply --auto-approve -lock=false&apos;
