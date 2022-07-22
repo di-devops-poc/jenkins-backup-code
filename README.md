@@ -9,3 +9,8 @@ Steps:
 5. Open the Jenkins console.
 6. Create the Github Credentails from `Manage Credentials`. Set `credentialsId` as `git_credentials`
 7. You are good to go. You can start buiding Jobs.
+
+
+-------------------------------------------------------------------------------------------------------------------------
+
+For more details on the Jenkins Job Check [here](https://github.com/di-devops-poc/jenkins-backup-code/tree/main/create-jobs-xml).
