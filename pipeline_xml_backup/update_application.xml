@@ -74,8 +74,8 @@
             steps{
                 script{
                      try{
-                     dir(&apos;${cloudname}-devops-code&apos;){
-                     git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/${cloudname}-devops-code&apos;
+                     dir(&apos;cloudname-devops-code&apos;){
+                     git branch: &apos;main&apos;, changelog: false, credentialsId: &apos;git_credentials&apos;, poll: false, url: &apos;https://github.com/di-devops-poc/cloudname-devops-code&apos;
                     }
                    }
                    catch(err){
@@ -91,7 +91,7 @@
             steps {
                 script{
                     try{
-                    dir(&apos;${cloudname}-devops-code/devops_shell_scripts/&apos;){
+                    dir(&apos;cloudname-devops-code/devops_shell_scripts/&apos;){
                             
                             sh &quot;bash check_build_image.sh ${added} ${modified} ${BUILD_NUMBER} ${WORKSPACE}&quot;
                         }
@@ -108,7 +108,7 @@
             steps {
                 script{
                     try{
-                        dir(&apos;${cloudname}-devops-code/devops_shell_scripts&apos;){
+                        dir(&apos;cloudname-devops-code/devops_shell_scripts&apos;){
                              sh &quot;bash check_push_image.sh ${added} ${modified} ${BUILD_NUMBER} ${WORKSPACE}&quot;
                         }
                     
@@ -125,7 +125,7 @@
            steps {
                script{
                    try{
-				   dir(&apos;${cloudname}-devops-code/devops_shell_scripts/&apos;){
+				   dir(&apos;cloudname-devops-code/devops_shell_scripts/&apos;){
 				    sh &quot;echo ${added}&quot;
 				    sh &quot;echo ${modified}&quot;
 				    
