@@ -1,8 +1,8 @@
 # jenkins-backup-code
 
-•	It contains Jenkins server backup in xml files and code in import_xml.sh file.
-•	Script import_xml.sh reads Jenkins backup xml files and imports them to Jenkins server. Then jobs are visible on Jenkins interface.
-•	This shell script import_xml.sh also installs the required plugins on Jenkins server.
+It contains Jenkins server backup in xml files and code in import_xml.sh file.
+Script import_xml.sh reads Jenkins backup xml files and imports them to Jenkins server. Then jobs are visible on Jenkins interface.
+This shell script import_xml.sh also installs the required plugins on Jenkins server.
 
 Steps yo use:
 1. SSH into the Virtual Machine.
