@@ -1,7 +1,10 @@
 # jenkins-backup-code
 
-This is the third part of the application. import_xml.sh file will create all the jobs and install the required plugins on Jenkins.
-Steps:
+•	It contains Jenkins server backup in xml files and code in import_xml.sh file.
+•	Script import_xml.sh reads Jenkins backup xml files and imports them to Jenkins server. Then jobs are visible on Jenkins interface.
+•	This shell script import_xml.sh also installs the required plugins on Jenkins server.
+
+Steps yo use:
 1. SSH into the Virtual Machine.
 2. Clone this repository. `git clone https://github.com/di-devops-poc/jenkins-backup-code.git`
 3. `cd gcp-devops-code/create-jobs-xml`
