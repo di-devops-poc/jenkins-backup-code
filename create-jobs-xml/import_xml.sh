@@ -17,15 +17,15 @@ sudo systemctl restart jenkins
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} install-plugin Generic-Webhook-Trigger -deploy
 
 #Create Job from .xml file.
-sed -e's%cloudname%'"${1}"'%g' -e 's%filename%'"${2}"'%g' create_kubernetes_cluster.xml > temp.xml
+sed -e "s%cloudname%${1}%g" -e "s%filename%${2}%g" create_kubernetes_cluster.xml > temp.xml
 mv temp.xml create_kubernetes_cluster.xml
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} create-job create_kubernetes_cluster < create_kubernetes_cluster.xml
 
-sed -e's%cloudname%'"${1}"'%g' -e 's%filename%'"${2}"'%g' update_application.xml > temp.xml
+sed -e "s%cloudname%${1}%g" -e "s%filename%${2}%g" update_application.xml > temp.xml
 mv temp.xml update_application.xml
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} create-job update_application < update_application.xml 
 
-sed -e's%cloudname%'"${1}"'%g' -e 's%filename%'"${2}"'%g' create_all_services.xml > temp.xml
+sed -e "s%cloudname%${1}%g" -e "s%filename%${2}%g" create_all_services.xml > temp.xml
 mv temp.xml create_all_services.xml
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} create-job create_all_services < create_all_services.xml
  
