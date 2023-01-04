@@ -7,7 +7,7 @@ This shell script `import_xml.sh` also installs the required plugins on Jenkins 
 Steps yo use:
 1. SSH into the Virtual Machine.
 2. Clone this repository. `git clone https://github.com/di-devops-poc/jenkins-backup-code.git`
-3. `cd gcp-devops-code/create-jobs-xml`
+3. `cd jenkins-backup-code/create-jobs-xml`
 4. Execute the import_xml.sh script. `bash -x import_xml.sh`.
 5. Open the Jenkins console.
 6. Create the Github Credentails from `Manage Credentials`. Set `credentialsId` as `git_credentials`
