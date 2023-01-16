@@ -12,7 +12,7 @@ gcloud compute --project=di-devops-poc instances get-serial-port-output di-devop
 
 #Get the Jenkins Initial Password
 Pass_Line=$(cat logs_output.txt | grep "Please use the following password to proceed to installation:" -A1 | tail -n 1)
-JENKINS_PASS=$(${Pass_Line##* })
+JENKINS_PASS=${Pass_Line##* }
 
 #Need to Restart, to create jenkins jobs from .xml files. 
 sudo systemctl restart jenkins
