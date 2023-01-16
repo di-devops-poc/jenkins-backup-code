@@ -5,7 +5,7 @@ WORK_SPACE=$(pwd)
 cd ${WORK_SPACE}/jenkins-backup-code/pipeline_xml_backup
 
 #Get the External IP Address of the VM instance.
-VM_IP_ADDRESS=$(gcloud compute instances describe my-ak-vm --zone='us-central1-a' --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
+VM_IP_ADDRESS=$(gcloud compute instances describe di-devops-vm --zone='us-central1-a' --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
 
 #Get VM Console Output in logs_output.txt
 gcloud compute --project=di-devops-poc instances get-serial-port-output di-devops-vm --zone=us-central1-a --port=1 > logs_output.txt
