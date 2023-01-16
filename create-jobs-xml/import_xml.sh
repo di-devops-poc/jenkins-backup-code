@@ -5,10 +5,14 @@ WORK_SPACE=$(pwd)
 cd ${WORK_SPACE}/jenkins-backup-code/pipeline_xml_backup
 
 #Get the External IP Address of the VM instance.
-VM_IP_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
+VM_IP_ADDRESS=$(gcloud compute instances describe my-ak-vm --zone='us-central1-a' --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
+
+#Get VM Console Output in logs_output.txt
+gcloud compute --project=di-devops-poc instances get-serial-port-output di-devops-vm --zone=us-central1-a --port=1 > logs_output.txt
 
 #Get the Jenkins Initial Password
-JENKINS_PASS=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
+Pass_Line=$(cat logs_output.txt | grep "Please use the following password to proceed to installation:" -A1 | tail -n 1)
+JENKINS_PASS=$(${Pass_Line##* })
 
 #Need to Restart, to create jenkins jobs from .xml files. 
 sudo systemctl restart jenkins
@@ -28,4 +32,3 @@ java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS
 sed -e "s%cloudname%${1}%g" -e "s%filename%${2}%g" create_all_services.xml > temp.xml
 mv temp.xml create_all_services.xml
 java -jar jenkins-cli.jar -s http://${VM_IP_ADDRESS}:8080/ -auth admin:${JENKINS_PASS} create-job create_all_services < create_all_services.xml
- 
