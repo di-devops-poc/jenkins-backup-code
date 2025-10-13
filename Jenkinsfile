@@ -24,7 +24,7 @@ pipeline {
 
         stage('Upload to GCS') {
             steps {
-                sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/jenkins/"
+                sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/"
             }
         }
     }
