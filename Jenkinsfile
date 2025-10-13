@@ -9,13 +9,9 @@ pipeline {
     }
 
     stages {
-        stage('Enable Quiet Mode') {
+        stage('backup Jenkins') {
             steps {
                 script {
-                    // Puts Jenkins into quiet mode
-                    def jenkins = Jenkins.instance
-                    jenkins.doQuietDown()
-                    echo "Jenkins is in quiet mode."
                     echo "Creating backup..."
                     sh """
                         tar -czf ${BACKUP_FILE} ${JENKINS_HOME}
@@ -27,6 +23,7 @@ pipeline {
 
         stage('Upload to GCS') {
             steps {
+                echo "Uploading backup to gcs..."
                 sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/"
             }
         }
