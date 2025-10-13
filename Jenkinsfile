@@ -5,7 +5,7 @@ pipeline {
         BACKUP_DIR = '/var/backups/jenkins'
         JENKINS_HOME = '/var/lib/jenkins'
         TIMESTAMP = "${new Date().format('yyyyMMdd_HHmmss')}"
-        BACKUP_FILE = "${BACKUP_DIR}/jenkins_backup_${env.TIMESTAMP}.tar.gz"
+        BACKUP_FILE = "${BACKUP_DIR}/jenkins_backup.tar.gz"
     }
 
     stages {
@@ -60,7 +60,7 @@ pipeline {
         // Optional: upload to Cloud Storage, S3, etc.
         // stage('Upload to GCS') {
         //     steps {
-        //         sh "gsutil cp ${BACKUP_FILE} gs://your-bucket-name/jenkins/"
+        //         sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/"
         //     }
         // }
 
