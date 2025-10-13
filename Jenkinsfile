@@ -15,31 +15,8 @@ pipeline {
                     // Puts Jenkins into quiet mode
                     def jenkins = Jenkins.instance
                     jenkins.doQuietDown()
-                    echo "Jenkins is in quiet mode. Waiting for running jobs to finish..."
-                }
-            }
-        }
-
-        stage('Wait for Running Jobs') {
-            steps {
-                script {
-                    // Wait for running builds to finish (max 5 min)
-                    int waitSecs = 0
-                    while (Jenkins.instance.computers.any { c -> c.executors.any { e -> e.isBusy() } }) {
-                        if (waitSecs > 300) {
-                            error("Timeout waiting for builds to finish.")
-                        }
-                        sleep(time: 5, unit: 'SECONDS')
-                        waitSecs += 5
-                    }
-                }
-            }
-        }
-
-        stage('Backup Jenkins Home') {
-            steps {
-                echo "Creating backup..."
-                script {
+                    echo "Jenkins is in quiet mode."
+                    echo "Creating backup..."
                     sh """
                         tar -czf ${BACKUP_FILE} ${JENKINS_HOME}
                         echo "Backup created at ${BACKUP_FILE}"
@@ -48,12 +25,11 @@ pipeline {
             }
         }
 
-        // Optional: upload to Cloud Storage, S3, etc.
-        // stage('Upload to GCS') {
-        //     steps {
-        //         sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/"
-        //     }
-        // }
+        stage('Upload to GCS') {
+            steps {
+                sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/"
+            }
+        }
 
         stage('Disable Quiet Mode') {
             steps {
