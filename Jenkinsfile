@@ -1,14 +1,37 @@
 pipeline {
     agent any
+
+    environment {
+        BACKUP_DIR = '/var/backups/jenkins'
+        JENKINS_HOME = '/var/lib/jenkins'
+        TIMESTAMP = "${new Date().format('yyyyMMdd_HHmmss')}"
+        BACKUP_FILE = "${BACKUP_DIR}/jenkins_backup.tar.gz"
+    }
+
     stages {
-        stage('Enable Quiet Mode') {
+
+        stage('Backup Jenkins Home') {
             steps {
+                echo "Creating backup..."
                 script {
-                    def jenkins = Jenkins.getInstance()
-                    jenkins.doQuietDown()
-                    echo "Quiet mode enabled."
+                    sh """
+                        tar --warning=no-file-changed --exclude='${BACKUP_DIR}/logs' -czf ${BACKUP_FILE} ${JENKINS_HOME}
+                        echo "Backup created at ${BACKUP_FILE}"
+                    """
                 }
             }
+        }
+
+        stage('Upload to GCS') {
+            steps {
+                sh "gsutil cp ${BACKUP_FILE} gs://devops-jenkins-bkp/jenkins/"
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Backup pipeline completed."
         }
     }
 }
