@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'master' }  // Or any agent where Jenkins is installed
+    agent any
 
     environment {
         BACKUP_DIR = '/var/backups/jenkins'
