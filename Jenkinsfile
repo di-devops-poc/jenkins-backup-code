@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Ensure backup directory exists
-                    sh "mkdir -p ${BACKUP_DIR}"
+                    sh "sudo mkdir -p ${BACKUP_DIR}"
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                 script {
                     // Puts Jenkins into quiet mode
                     def jenkins = Jenkins.instance
-                    jenkins.doQuietDown()
+                    sudo jenkins.doQuietDown()
                     echo "Jenkins is in quiet mode. Waiting for running jobs to finish..."
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
                 echo "Creating backup..."
                 script {
                     sh """
-                        tar -czf ${BACKUP_FILE} ${JENKINS_HOME}
+                        sudo tar -czf ${BACKUP_FILE} ${JENKINS_HOME}
                         echo "Backup created at ${BACKUP_FILE}"
                     """
                 }
@@ -67,7 +67,7 @@ pipeline {
         stage('Disable Quiet Mode') {
             steps {
                 script {
-                    Jenkins.instance.doCancelQuietDown()
+                    sudo Jenkins.instance.doCancelQuietDown()
                     echo "Jenkins resumed normal operation."
                 }
             }
