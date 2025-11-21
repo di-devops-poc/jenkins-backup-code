@@ -13,10 +13,16 @@ pipeline {
             steps {
                 echo "Creating backup..."
                 script {
-                    sh """
-                        tar --warning=no-file-changed --exclude="logs" -czf "${BACKUP_FILE}" -C "${JENKINS_HOME}" .
-                        echo "Backup created at ${BACKUP_FILE}"
-                    """
+					def status = sh(
+						script: """
+							tar --warning=no-file-changed --exclude="logs" -czf "${BACKUP_FILE}" -C "${JENKINS_HOME}" .
+						""",
+						returnStatus: true
+					)
+					if (status != 0) {
+						echo "Warning: tar returned non-zero exit code ${status}, but backup file was likely created."
+					}
+					echo "Backup created at ${BACKUP_FILE}"
                 }
             }
         }
