@@ -9,13 +9,22 @@ pipeline {
     }
 
     stages {
-        stage('Backup Jenkins Home') {
+        stage('Quiet Down Jenkins') {
+            steps {
+                echo "Putting Jenkins in quiet mode (no new builds)..."
+                sh "curl -X POST http://localhost:8080/quietDown"
+            }
+        }
+
+        stage('Perform Backup') {
             steps {
                 echo "Creating backup..."
                 script {
 					def status = sh(
+                        echo "Creating Jenkins backup..."
 						script: """
-							tar --warning=no-file-changed --exclude="logs" -czf "${BACKUP_FILE}" -C "${JENKINS_HOME}" .
+                            rsync -a --delete --exclude='workspace' --exclude='logs' ${JENKINS_HOME}/ ${BACKUP_DIR}/home_snapshot/
+                            tar -czf '${BACKUP_FILE}' -C '${BACKUP_DIR}/home_snapshot' .
 						""",
 						returnStatus: true
 					)
@@ -24,6 +33,12 @@ pipeline {
 					}
 					echo "Backup created at ${BACKUP_FILE}"
                 }
+            }
+        }
+
+        stage('Resume Jenkins Operations') {
+            steps {
+                sh "curl -X POST http://localhost:8080/cancelQuietDown"
             }
         }
 
@@ -37,6 +52,7 @@ pipeline {
     post {
         always {
             echo "Backup pipeline completed."
+            cleanWs()
         }
     }
 }
