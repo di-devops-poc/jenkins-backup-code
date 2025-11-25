@@ -21,7 +21,6 @@ pipeline {
                 echo "Creating backup..."
                 script {
 					def status = sh(
-                        echo "Creating Jenkins backup..."
 						script: """
                             rsync -a --delete --exclude='workspace' --exclude='logs' ${JENKINS_HOME}/ ${BACKUP_DIR}/home_snapshot/
                             tar -czf '${BACKUP_FILE}' -C '${BACKUP_DIR}/home_snapshot' .
